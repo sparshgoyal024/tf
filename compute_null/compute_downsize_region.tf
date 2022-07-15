@@ -1,0 +1,102 @@
+
+locals {
+  compute_downsize_region = [
+"a2_cpus",
+"affinity_groups",
+"autoscalers",
+"c2_cpus",
+"c2d_cpus",
+"commitments",
+"committed_a2_cpus",
+"committed_c2_cpus",
+"committed_c2d_cpus",
+"committed_cpus",
+"committed_e2_cpus",
+"committed_licenses",
+"committed_local_ssd_total_storage",
+"committed_m3_cpus",
+"committed_memory_optimized_cpus",
+"committed_n2_cpus",
+"committed_n2d_cpus",
+"committed_nvidia_a100_gpus",
+"committed_nvidia_k80_gpus",
+"committed_nvidia_p100_gpus",
+"committed_nvidia_p4_gpus",
+"committed_nvidia_t4_gpus",
+"committed_nvidia_v100_gpus",
+"committed_t2d_cpus",
+"cpus",
+"regional_autoscalers",
+"regional_in_use_addresses",
+"regional_instance_group_managers",
+"regional_network_firewall_policies",
+"regional_public_delegated_prefixes",
+"regional_static_addresses",
+"regional_static_byoip_addresses",
+"regional_static_external_ipv6_address_ranges",
+"regional_target_tcp_proxies",
+"pd_extreme_total_provisioned_iops",
+"preemptible_cpus",
+"preemptible_local_ssd_gb",
+"preemptible_nvidia_a100_gpus",
+"preemptible_nvidia_k80_gpus",
+"preemptible_nvidia_p100_gpus",
+"preemptible_nvidia_p100_vws_gpus",
+"preemptible_nvidia_p4_gpus",
+"preemptible_nvidia_p4_vws_gpus",
+"preemptible_nvidia_t4_gpus",
+"preemptible_nvidia_t4_vws_gpus",
+"preemptible_nvidia_v100_gpus",
+"disks_total_storage",
+"e2_cpus",
+"external_managed_forwarding_rules",
+"external_network_lb_forwarding_rules",
+"external_protocol_forwarding_rules",
+"nvidia_a100_gpus",
+"nvidia_k80_gpus",
+"nvidia_p100_gpus",
+"nvidia_p100_vws_gpus",
+"nvidia_p4_gpus",
+"nvidia_p4_vws_gpus",
+"nvidia_t4_gpus",
+"nvidia_t4_vws_gpus",
+"nvidia_v100_gpus",
+"in_use_backup_schedules",
+"in_use_snapshot_schedules",
+"instance_group_managers",
+"instance_groups",
+"instances",
+"interconnect_attachments_per_region",
+"interconnect_attachments_total_mbps",
+"internal_addresses",
+"network_endpoint_groups",
+"node_groups",
+"node_templates",
+"psc_internal_lb_forwarding_rules",
+"reservations",
+"resource_policies",
+"service_attachments",
+"local_ssd_total_storage",
+"m1_cpus",
+"m2_cpus",
+"m3_cpus",
+"n2_cpus",
+"n2d_cpus",
+"ssd_total_storage",
+"t2d_cpus",
+"t2a_cpus"
+  ]
+  
+}
+
+resource "google_service_usage_consumer_quota_override" "compute_5" {
+  provider = google-beta
+  for_each   = toset(local.compute_downsize_region)
+  project = var.project
+  service = "compute.googleapis.com"
+  metric = urlencode("compute.googleapis.com/${each.key}")
+  limit = urlencode("/project/region")
+  override_value = "0"
+  force = true
+ 
+}
